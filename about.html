@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us - Cake Shop</title>
+<link rel="shortcut icon" href="folderi/img/cake_logo.png" type="image/x-icon">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+<style>
+:root {
+  --header-height: 3.5rem;
+  --first-color: #ff7f50;
+  --second-color: #e66c3c;
+  --title-color: #f0f0f0;
+  --text-color: #ccc;
+  --text-color-light: #999;
+  --body-color: #1a1a1a;
+  --container-color: #262626;
+  --white-color: #fff;
+  --card-bg-color: #333;
+}
+* { box-sizing:border-box; margin:0; padding:0;}
+body { font-family:'Arial',sans-serif; background-color: var(--body-color); color: var(--text-color); transition: background 0.4s;}
+a { text-decoration:none; color:inherit; }
+.header { width:100%; position:fixed; top:0; left:0; z-index:100; background-color:var(--body-color); height:var(--header-height); display:flex; align-items:center; padding:0 1.5rem;}
+.nav_logo { display:flex; align-items:center; gap:0.25rem; color: var(--white-color); font-weight:600;}
+.nav_logo img { width:28px; }
+.nav_list { display:flex; gap:2rem; margin-left:auto; }
+.nav_link { color: var(--text-color); font-weight:500; transition:color 0.3s; }
+.nav_link:hover, .active-link { color: var(--first-color);}
+.main { padding-top: calc(var(--header-height) + 2rem); }
+.section { padding:4rem 1.5rem; max-width:1024px; margin:auto; }
+.section h1, .section h2 { color: var(--title-color); margin-bottom:1rem; }
+.section p { color: var(--text-color-light); margin-bottom:1rem; line-height:1.6; }
+.about-cards { display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:2rem; margin-top:2rem; }
+.card { background-color: var(--card-bg-color); padding:2rem; border-radius:20px; text-align:center; transition: transform 0.3s, box-shadow 0.3s; }
+.card:hover { transform: translateY(-10px); box-shadow:0 20px 40px rgba(0,0,0,0.3);}
+.card i { font-size:2rem; color: var(--first-color); margin-bottom:1rem; }
+.footer { background-color: var(--container-color); text-align:center; padding:2rem; font-size:0.75rem; color: var(--text-color-light);}
+@media screen and (max-width:768px){ .nav_list { flex-direction:column; gap:1rem; margin-top:0.5rem; }}
+</style>
+</head>
+<body>
+<header class="header">
+  <a href="index.html" class="nav_logo"><img src="folderi/img/cake_logo.png" alt="logo"> Cake</a>
+  <nav class="nav_list">
+    <a href="index.html" class="nav_link">Home</a>
+    <a href="aboutus.html" class="nav_link active-link">About Us</a>
+    <a href="shop.html" class="nav_link">Shop</a>
+    <a href="contact.html" class="nav_link">Contact</a>
+    <a href="login.html" class="nav_link">Login</a>
+  </nav>
+</header>
+
+<main class="main">
+  <section class="section">
+    <h1>About Our Cake Shop</h1>
+    <p>Welcome to Cake Shop! We are passionate about creating the most delicious and beautiful cakes for every occasion. From classic flavors to unique creations, we take pride in every cake we make.</p>
+    <p>Our mission is to bring joy and sweetness to your celebrations with high-quality ingredients and exceptional craftsmanship. Whether it's a birthday, wedding, or just a treat for yourself, we've got you covered!</p>
+  </section>
+
+  <section class="section">
+    <h2>Why Choose Us?</h2>
+    <div class="about-cards">
+      <div class="card">
+        <i class="ri-star-fill"></i>
+        <h3>Premium Ingredients</h3>
+        <p>We only use fresh, high-quality ingredients to make our cakes delicious and healthy.</p>
+      </div>
+      <div class="card">
+        <i class="ri-heart-fill"></i>
+        <h3>Love in Every Cake</h3>
+        <p>Every cake is baked with care, passion, and attention to detail.</p>
+      </div>
+      <div class="card">
+        <i class="ri-award-fill"></i>
+        <h3>Creative Designs</h3>
+        <p>We offer unique and customized cake designs to match your style and occasion.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  &#169; 2025 Cake Shop.
+</footer>
+</body>
+</html>

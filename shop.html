@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop - Delicious Cakes</title>
+<link rel="shortcut icon" href="folderi/img/cake_logo.png" type="image/x-icon">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+<style>
+:root {
+  --header-height: 3.5rem;
+  --first-color: #ff7f50;
+  --second-color: #e66c3c;
+  --title-color: #f0f0f0;
+  --text-color: #ccc;
+  --text-color-light: #999;
+  --body-color: #1a1a1a;
+  --container-color: #262626;
+  --white-color: #fff;
+  --card-bg-color: #333;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Arial', sans-serif; font-size: 1rem; background-color: var(--body-color); color: var(--text-color); transition: background 0.4s; }
+a { text-decoration: none; }
+ul { list-style: none; }
+img { max-width: 100%; height: auto; }
+.container { max-width: 1024px; margin-left: 1.5rem; margin-right: 1.5rem; }
+.light-theme { --title-color: #222; --text-color: #555; --text-color-light: #888; --body-color: #f7f7f7; --container-color: #fff; --card-bg-color: var(--white-color); }
+.light-theme .header, .light-theme .footer { background-color: var(--container-color); box-shadow: 0 1px 12px rgba(0,0,0,0.08); }
+.light-theme .shop-card { background: var(--card-bg-color); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+.light-theme .shop-header p { color: var(--text-color-light); }
+.light-theme .nav_link { color: var(--text-color); }
+.light-theme .nav_link.active-link, .light-theme .nav_link:hover { color: var(--first-color); }
+.light-theme .nav_logo { color: var(--title-color); }
+.light-theme .nav_buttons i { color: var(--title-color); }
+.header { width: 100%; position: fixed; top: 0; left: 0; z-index: 100; background-color: var(--body-color); transition: background 0.4s; }
+.nav { height: var(--header-height); display: flex; justify-content: space-between; align-items: center; }
+.nav_logo { display: flex; align-items: center; column-gap: 0.25rem; color: var(--white-color); font-weight: 600; }
+.nav_logo img { width: 28px; }
+.nav_list { display: flex; column-gap: 2.5rem; }
+.nav_item { list-style: none; }
+.nav_link { color: var(--text-color); font-weight: 500; transition: color 0.3s; }
+.nav_link:hover, .active-link { color: var(--first-color); }
+.nav_buttons { display: flex; align-items: center; column-gap: 1.5rem; }
+.change-theme { font-size: 1.25rem; cursor: pointer; color: var(--text-color); }
+.nav_close, .nav_toggle { display: none; }
+.shop-header { text-align: center; margin: calc(var(--header-height) + 2.5rem) 0 2rem 0; }
+.shop-header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--title-color); }
+.shop-header p { font-size: 1rem; color: var(--text-color-light); }
+.shop-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; padding: 0 1.5rem 4rem 1.5rem; max-width: 1024px; margin-left: auto; margin-right: auto; }
+.shop-card { position: relative; background: var(--card-bg-color); border-radius: 20px; overflow: hidden; text-align: center; padding-bottom: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.1); transition: transform 0.5s, box-shadow 0.5s, background 0.4s; cursor:pointer;}
+.shop-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+.shop-card-img-box { overflow: hidden; height: 220px; border-top-left-radius: 20px; border-top-right-radius: 20px; position: relative; }
+.shop-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+.shop-card:hover img { transform: scale(1.1); }
+.shop-badge { position: absolute; top: 15px; right: 15px; background: var(--first-color); color: var(--white-color); padding: 0.3rem 0.7rem; border-radius: 5px; font-size: 0.75rem; font-weight: bold; letter-spacing: 0.5px; z-index: 10; }
+.shop-title { font-size: 1.3rem; font-weight: 700; margin: 1rem 0 0.3rem 0; color: var(--title-color); }
+.shop-rating { color: gold; font-size: 1.1rem; margin-bottom: 0.5rem; }
+.shop-description { font-size: 0.9rem; color: var(--text-color); margin-bottom: 0.5rem; padding: 0 1rem; display:none;}
+.shop-price { font-weight: bold; color: var(--first-color); margin-bottom: 0.8rem; display: block; font-size: 1.2rem; }
+.footer { background-color: var(--container-color); padding-top: 4rem; padding-bottom: 2rem; }
+.footer_info { text-align: center; margin-top: 4rem; }
+.footer_copy { font-size: 0.75rem; color: var(--text-color-light); }
+@media screen and (max-width: 768px){
+  .nav_menu { position: fixed; top: 0; right: -100%; background-color: var(--container-color); width: 80%; max-width: 300px; height: 100%; padding: 6rem 3rem 4rem; transition: right 0.4s; z-index: 1000; }
+  .nav_list { flex-direction: column; row-gap: 2.5rem; }
+  .show-menu { right: 0; }
+  .nav_toggle { display: block; font-size: 1.5rem; cursor: pointer; color: var(--text-color); }
+  .nav_close { display: block; position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.5rem; cursor: pointer; color: var(--text-color); }
+  .shop-header { margin-top: 5rem; padding: 0 1rem; }
+}
+/* Modal styles */
+.modal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); display:flex; justify-content:center; align-items:center; opacity:0; pointer-events:none; transition: opacity 0.3s ease;}
+.modal.show { opacity:1; pointer-events:auto;}
+.modal-content { background: var(--container-color); padding:1.5rem; border-radius:15px; max-width:400px; width:90%; text-align:center; transform: scale(0.8); transition: transform 0.3s ease;}
+.modal.show .modal-content { transform: scale(1);}
+.modal-content img { width:100%; border-radius:10px; margin-bottom:1rem;}
+.modal-close { position:absolute; top:10px; right:10px; font-size:1.5rem; cursor:pointer; color:var(--first-color);}
+.modal-title { font-size:1.5rem; margin-bottom:0.5rem; }
+.modal-price { color: var(--first-color); font-weight:bold; margin-bottom:0.5rem; }
+.modal-rating { color: gold; margin-bottom:0.5rem;}
+.modal-description { color: var(--text-color-light);}
+</style>
+</head>
+<body>
+
+<header class="header" id="header">
+  <nav class="nav container">
+    <a href="index.html" class="nav_logo"><img src="folderi/img/cake_logo.png" alt="logo"> Cake</a>
+    <div class="nav_menu" id="nav-menu">
+      <ul class="nav_list">
+        <li><a href="index.html" class="nav_link">Home</a></li>
+        <li><a href="about.html" class="nav_link">About</a></li>
+        <li><a href="shop.html" class="nav_link active-link">Shop</a></li>
+        <li><a href="contact.html" class="nav_link">Contact</a></li>
+        <li><a href="login.html" class="nav_link">Login</a></li>
+      </ul>
+      <div class="nav_close" id="nav-close"><i class="ri-close-line"></i></div>
+    </div>
+    <div class="nav_buttons">
+      <i class="ri-moon-line change-theme" id="theme-button"></i>
+      <div class="nav_toggle" id="nav-toggle"><i class="ri-apps-2-line"></i></div>
+    </div>
+  </nav>
+</header>
+
+<main class="main">
+  <section class="shop-header">
+    <h1>Our Delicious Cakes</h1>
+    <p>Browse our wide variety of cakes and click on them to see details!</p>
+  </section>
+
+  <section class="shop-container container">
+    <!-- All 14 cakes -->
+    <div class="shop-card" data-title="Chocolate Delight" data-price="$25.00" data-rating="⭐⭐⭐⭐⭐" data-description="Rich chocolate cake topped with creamy frosting." data-img="folderi/img/ChocolateDel.jpg"><div class="shop-card-img-box"><img src="folderi/img/ChocolateDel.jpg"><span class="shop-badge">NEW</span></div><h3 class="shop-title">Chocolate Delight</h3><div class="shop-rating">⭐⭐⭐⭐⭐</div><span class="shop-price">$25.00</span></div>
+
+    <div class="shop-card" data-title="Strawberry Heaven" data-price="$30.00" data-rating="⭐⭐⭐⭐" data-description="Fresh strawberries on soft vanilla sponge." data-img="folderi/img/Strawberry Heaven.png"><div class="shop-card-img-box"><img src="folderi/img/Strawberry Heaven.png"></div><h3 class="shop-title">Strawberry Heaven</h3><div class="shop-rating">⭐⭐⭐⭐</div><span class="shop-price">$30.00</span></div>
+
+    <div class="shop-card" data-title="Vanilla Bliss" data-price="$28.00" data-rating="⭐⭐⭐⭐⭐" data-description="Classic vanilla cake with smooth buttercream." data-img="folderi/img/VanillaBliss.png"><div class="shop-card-img-box"><img src="folderi/img/VanillaBliss.png"></div><h3 class="shop-title">Vanilla Bliss</h3><div class="shop-rating">⭐⭐⭐⭐⭐</div><span class="shop-price">$28.00</span></div>
+
+    <div class="shop-card" data-title="Red Velvet Dream" data-price="$35.00" data-rating="⭐⭐⭐½" data-description="Red Velvet cake with cream cheese frosting." data-img="folderi/img/Red Velvet Cake.jpg"><div class="shop-card-img-box"><img src="folderi/img/Red Velvet Cake.jpg"></div><h3 class="shop-title">Red Velvet Dream</h3><div class="shop-rating">⭐⭐⭐½</div><span class="shop-price">$35.00</span></div>
+
+    <div class="shop-card" data-title="New York Cheesecake" data-price="$32.00" data-rating="⭐⭐⭐⭐⭐" data-description="Creamy cheesecake with graham crust." data-img="folderi/img/NewYork CheeseCake.jpg"><div class="shop-card-img-box"><img src="folderi/img/NewYork CheeseCake.jpg"></div><h3 class="shop-title">New York Cheesecake</h3><div class="shop-rating">⭐⭐⭐⭐⭐</div><span class="shop-price">$32.00</span></div>
+
+    <div class="shop-card" data-title="Lemon Zest" data-price="$27.00" data-rating="⭐⭐⭐⭐" data-description="Tangy lemon cake with glaze." data-img="folderi/img/LemonCake.jfif"><div class="shop-card-img-box"><img src="folderi/img/LemonCake.jfif"></div><h3 class="shop-title">Lemon Zest</h3><div class="shop-rating">⭐⭐⭐⭐</div><span class="shop-price">$27.00</span></div>
+
+    <div class="shop-card" data-title="Carrot Crunch" data-price="$29.00" data-rating="⭐⭐⭐⭐⭐" data-description="Moist carrot cake with cream cheese frosting." data-img="folderi/img/Carrot Crunch.jpg"><div class="shop-card-img-box"><img src="folderi/img/Carrot Crunch.jpg"></div><h3 class="shop-title">Carrot Crunch</h3><div class="shop-rating">⭐⭐⭐⭐⭐</div><span class="shop-price">$29.00</span></div>
+
+    <div class="shop-card" data-title="Coffee Mocha" data-price="$26.00" data-rating="⭐⭐⭐⭐" data-description="Coffee sponge with mocha icing." data-img="folderi/img/CoffeeCake.jpg"><div class="shop-card-img-box"><img src="folderi/img/CoffeeCake.jpg"></div><h3 class="shop-title">Coffee Mocha</h3><div class="shop-rating">⭐⭐⭐⭐</div><span class="shop-price">$26.00</span></div>
+
+    <div class="shop-card" data-title="Black Forest" data-price="$33.00" data-rating="⭐⭐⭐⭐⭐" data-description="Chocolate & cherry layers topped with cream." data-img="folderi/img/BlackForest.jfif"><div class="shop-card-img-box"><img src="folderi/img/BlackForest.jfif"></div><h3 class="shop-title">Black Forest</h3><div class="shop-rating">⭐⭐⭐⭐⭐</div><span class="shop-price">$33.00</span></div>
+
+    <div class="shop-card" data-title="Mango Delight" data-price="$31.00" data-rating="⭐⭐⭐⭐" data-description="Tropical mango flavored soft cake." data-img="folderi/img/MangoCake.jpg"><div class="shop-card-img-box"><img src="folderi/img/MangoCake.jpg"></div><h3 class="shop-title">Mango Delight</h3><div class="shop-rating">⭐⭐⭐⭐</div><span class="shop-price">$31.00</span></div>
+
+    <div class="shop-card" data-title="Matcha Green Tea" data-price="$34.00" data-rating="⭐⭐⭐⭐½" data-description="Light sponge with Japanese matcha flavor." data-img="folderi/img/MatchaCake.jfif"><div class="shop-card-img-box"><img src="folderi/img/MatchaCake.jfif"></div><h3 class="shop-title">Matcha Green Tea</h3><div class="shop-rating">⭐⭐⭐⭐½</div><span class="shop-price">$34.00</span></div>
+
+    <div class="shop-card" data-title="Pineapple Fantasy" data-price="$29.50" data-rating="⭐⭐⭐⭐" data-description="Juicy pineapple layered cake." data-img="folderi/img/PineappleCake.webp"><div class="shop-card-img-box"><img src="folderi/img/PineappleCake.webp"></div><h3 class="shop-title">Pineapple Fantasy</h3><div class="shop-rating">⭐⭐⭐⭐</div><span class="shop-price">$29.50</span></div>
+
+    <div class="shop-card" data-title="Blueberry Bliss" data-price="$30.00" data-rating="⭐⭐⭐⭐" data-description="Sweet blueberry cream cake." data-img="folderi/img/BlueberryCake.jpg"><div class="shop-card-img-box"><img src="folderi/img/BlueberryCake.jpg"></div><h3 class="shop-title">Blueberry Bliss</h3><div class="shop-rating">⭐⭐⭐⭐</div><span class="shop-price">$30.00</span></div>
+
+    <div class="shop-card" data-title="Fruit Fiesta" data-price="$36.00" data-rating="⭐⭐⭐½" data-description="Classic rich fruit cake." data-img="folderi/img/FruitCake.webp"><div class="shop-card-img-box"><img src="folderi/img/FruitCake.webp"></div><h3 class="shop-title">Fruit Fiesta</h3><div class="shop-rating">⭐⭐⭐½</div><span class="shop-price">$36.00</span></div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer_info container">
+    <span class="footer_copy">&#169; 2025 Cake Shop.</span>
+  </div>
+</footer>
+
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <span class="modal-close" id="modal-close">&times;</span>
+    <img id="modal-img" src="" alt="">
+    <h2 class="modal-title" id="modal-title"></h2>
+    <div class="modal-rating" id="modal-rating"></div>
+    <div class="modal-price" id="modal-price"></div>
+    <p class="modal-description" id="modal-description"></p>
+  </div>
+</div>
+
+<script>
+const navMenu = document.getElementById('nav-menu'),
+      navToggle = document.getElementById('nav-toggle'),
+      navClose = document.getElementById('nav-close');
+if(navToggle){navToggle.addEventListener('click',()=>navMenu.classList.add('show-menu'))}
+if(navClose){navClose.addEventListener('click',()=>navMenu.classList.remove('show-menu'))}
+const themeButton=document.getElementById('theme-button'),body=document.body,selectedTheme=localStorage.getItem('selected-theme');
+const applyTheme=(t)=>{if(t==='light'){body.classList.add('light-theme');}else{body.classList.remove('light-theme');}};
+applyTheme(selectedTheme==='light'?'light':'dark');
+themeButton.addEventListener('click',()=>{body.classList.toggle('light-theme');localStorage.setItem('selected-theme',body.classList.contains('light-theme')?'light':'dark');});
+
+const modal = document.getElementById('modal'),
+      modalClose = document.getElementById('modal-close'),
+      modalImg = document.getElementById('modal-img'),
+      modalTitle = document.getElementById('modal-title'),
+      modalRating = document.getElementById('modal-rating'),
+      modalPrice = document.getElementById('modal-price'),
+      modalDescription = document.getElementById('modal-description');
+
+document.querySelectorAll('.shop-card').forEach(card => {
+  card.addEventListener('click', () => {
+    modalImg.src = card.dataset.img;
+    modalTitle.textContent = card.dataset.title;
+    modalRating.textContent = card.dataset.rating;
+    modalPrice.textContent = card.dataset.price;
+    modalDescription.textContent = card.dataset.description;
+    modal.classList.add('show');
+  });
+});
+modalClose.addEventListener('click', () => modal.classList.remove('show'));
+modal.addEventListener('click', e => { if(e.target === modal) modal.classList.remove('show'); });
+</script>
+
+</body>
+</html>

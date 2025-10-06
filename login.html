@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auth - Cake Shop</title>
+<link rel="shortcut icon" href="folderi/img/iconss.png" type="image/x-icon">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+<style>
+:root {
+  --header-height: 3.5rem;
+  --first-color: #ff7f50;
+  --second-color: #e66c3c;
+  --title-color: #f0f0f0;
+  --text-color: #ccc;
+  --text-color-light: #999;
+  --body-color: #1a1a1a;
+  --container-color: #262626;
+  --white-color: #fff;
+  --card-bg-color: #333;
+  --error-color: #ff6b6b;
+  --success-color: #4CAF50;
+}
+* { box-sizing:border-box; margin:0; padding:0;}
+body {font-family:'Arial',sans-serif; background-color: var(--body-color); color: var(--text-color); transition: background 0.4s;}
+a {text-decoration:none; color:inherit;}
+.header { width:100%; position:fixed; top:0; left:0; z-index:100; background-color:var(--body-color); height:var(--header-height); display:flex; align-items:center; padding:0 1.5rem;}
+.nav_logo { display:flex; align-items:center; gap:0.25rem; color: var(--white-color); font-weight:600;}
+.nav_logo img { width:28px; }
+.main { padding-top: calc(var(--header-height) + 4rem); display:flex; justify-content:center; align-items:center; min-height:calc(100vh - var(--header-height)); }
+.auth-card { background-color: var(--card-bg-color); padding:2rem; border-radius:20px; width:100%; max-width:400px; box-shadow:0 10px 25px rgba(0,0,0,0.3); position:absolute; transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);}
+.auth-card h2 { text-align:center; margin-bottom:1rem; color: var(--title-color);}
+.auth-card input { width:100%; padding:0.75rem; margin-bottom:1rem; border-radius:10px; border:none; outline:none; background-color: var(--container-color); color: var(--text-color);}
+.auth-card input::placeholder { color: var(--text-color-light);}
+.auth-card button { width:100%; padding:0.75rem; border:none; border-radius:50px; background-color: var(--first-color); color: var(--white-color); font-weight:500; cursor:pointer; transition: background 0.3s;}
+.auth-card button:hover { background-color: var(--second-color);}
+.auth-card p.switch-link { text-align:center; margin-top:1rem; font-size:0.875rem;}
+.auth-card p.switch-link a { color: var(--first-color); cursor:pointer; transition:color 0.3s;}
+.auth-card p.switch-link a:hover { color: var(--second-color);}
+#signup-card { opacity: 0; pointer-events: none; transform: translateX(100%);}
+#login-card.hidden { opacity: 0; pointer-events: none; transform: translateX(-100%);}
+#signup-card.visible { opacity: 1; pointer-events: all; transform: translateX(0);}
+.message-box { font-size: 0.875rem; margin-bottom: 1rem; text-align: center; height: 1.2rem; line-height: 1.2rem; opacity: 0; transition: opacity 0.5s, color 0.5s;}
+.message-box.error { color: var(--error-color);}
+.message-box.success { color: var(--success-color);}
+.status-message { color: var(--success-color); font-size: 1.25rem; text-align: center; padding: 2rem; border: 1px solid var(--success-color); border-radius: 10px; background-color: var(--container-color); opacity: 0; transition: opacity 0.5s;}
+</style>
+</head>
+<body>
+<header class="header">
+  <a href="index.html" class="nav_logo"><img src="folderi/img/iconss.png" alt="logo"> Cake</a>
+</header>
+<main class="main">
+  <div class="status-message" id="logged-in-status">Already logged in. Redirecting to Homepage...</div>
+  <div class="auth-card" id="login-card">
+    <h2>Login</h2>
+    <p class="message-box" id="login-message"></p>
+    <input type="text" id="login-username" placeholder="Username">
+    <input type="password" id="login-password" placeholder="Password">
+    <button onclick="handleLogin()">Login</button>
+    <p class="switch-link">Don't have an account? <a onclick="toggleAuth('signup')">Sign Up</a></p>
+  </div>
+  <div class="auth-card" id="signup-card">
+    <h2>Sign Up</h2>
+    <p class="message-box" id="signup-message"></p>
+    <input type="text" id="signup-username" placeholder="Choose Username">
+    <input type="email" id="signup-email" placeholder="Email Address">
+    <input type="password" id="signup-password" placeholder="Choose Password">
+    <input type="password" id="signup-confirm-password" placeholder="Confirm Password">
+    <button onclick="handleSignUp()">Sign Up</button>
+    <p class="switch-link">Already have an account? <a onclick="toggleAuth('login')">Login</a></p>
+  </div>
+</main>
+<footer class="footer">
+  &#169; 2025 Cake Shop.
+</footer>
+<script>
+const users = [{ username: "admin", password: "cake123", email: "admin@cake.com" }];
+function showMessage(elementId, message, isError = true, autoHide = true) {
+    const msgElement = document.getElementById(elementId);
+    if (!msgElement) return;
+    msgElement.className = 'message-box ' + (isError ? 'error' : 'success');
+    msgElement.textContent = message;
+    msgElement.style.opacity = 1;
+    if (isError && autoHide) setTimeout(() => { msgElement.style.opacity = 0; setTimeout(() => { msgElement.textContent = ''; }, 500); }, 3000);
+}
+function handleLogin() {
+    const username = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value.trim();
+    const messageId = 'login-message';
+    document.getElementById(messageId).style.opacity = 0;
+    if (!username || !password) { showMessage(messageId, "Please enter both username and password.", true); return; }
+    const user = users.find(u => u.username === username && u.password === password);
+    if (user) {
+        sessionStorage.setItem('isLoggedIn', 'true');
+        sessionStorage.setItem('username', user.username);
+        showMessage(messageId, "Login successful! Redirecting...", false, false);
+        setTimeout(() => { window.location.href = "index.html"; }, 2000); 
+    } else { showMessage(messageId, "Invalid username or password. Try 'admin' and 'cake123'.", true); }
+}
+function handleSignUp() {
+    const username = document.getElementById('signup-username').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const password = document.getElementById('signup-password').value.trim();
+    const confirmPassword = document.getElementById('signup-confirm-password').value.trim();
+    const messageId = 'signup-message';
+    document.getElementById(messageId).style.opacity = 0;
+    if (!username || !email || !password || !confirmPassword) { showMessage(messageId, "All fields are required.", true); return; }
+    if (password.length < 6) { showMessage(messageId, "Password must be at least 6 characters long.", true); return; }
+    if (password !== confirmPassword) { showMessage(messageId, "Passwords do not match.", true); return; }
+    if (users.some(u => u.username === username)) { showMessage(messageId, "Username is already taken.", true); return; }
+    if (!/\S+@\S+\.\S+/.test(email)) { showMessage(messageId, "Please enter a valid email address.", true); return; }
+    users.push({ username, password, email });
+    showMessage(messageId, "Sign Up Successful! Redirecting to Login...", false, false);
+    setTimeout(() => { toggleAuth('login'); document.getElementById('signup-username').value = ''; document.getElementById('signup-email').value = ''; document.getElementById('signup-password').value = ''; document.getElementById('signup-confirm-password').value = ''; document.getElementById(messageId).style.opacity = 0; }, 3500);
+}
+function toggleAuth(target) {
+    const loginCard = document.getElementById('login-card');
+    const signupCard = document.getElementById('signup-card');
+    if (target === 'signup') { loginCard.classList.add('hidden'); signupCard.classList.add('visible'); }
+    else { loginCard.classList.remove('hidden'); signupCard.classList.remove('visible'); }
+}
+function checkLoginStatus() {
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+    const statusBox = document.getElementById('logged-in-status');
+    const loginCard = document.getElementById('login-card');
+    const signupCard = document.getElementById('signup-card');
+    if (isLoggedIn === 'true') {
+        loginCard.style.display = 'none';
+        signupCard.style.display = 'none';
+        statusBox.style.opacity = 1;
+        setTimeout(() => { window.location.href = "index.html"; }, 2000); 
+        return true;
+    }
+    return false;
+}
+document.addEventListener('DOMContentLoaded', () => { if (!checkLoginStatus()) document.getElementById('login-card').classList.remove('hidden'); });
+</script>
+</body>
+</html>
